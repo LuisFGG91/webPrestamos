@@ -1,0 +1,167 @@
+{% extends "layouts/base-fullscreen.html" %}
+{% load static %}
+
+{% block title %} Prestamos {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link type="text/css" href="{% static 'pres_assets/jquery/css/jquery-confirm.min.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+    <main class="content">
+        {% include 'includes/navigation.html' %}
+        <div class="preloader bg-soft flex-column justify-content-center align-items-center">
+        </div>
+        <div class="row align-items-center justify-content-between">
+            <div class="d-block mb-4 ">
+                <h2 class="h4"> Prestamos </h2>
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="card border-light shadow-sm components-section">
+                            <div class="card-body">     
+                                <div class="row mb-4">
+                                    <div class="col-lg-4 col-sm-6">
+                                                    <!-- Form -->
+                                                    <div class="mb-2">
+                                                        <label for="disabledTextInput">Name</label>
+                                                        <input value = "{{ request.user.get_full_name }}" type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input" disabled="">
+                                                    </div>
+                                                    <!-- End of Form -->
+                                                    <!-- Form -->
+                                                    <div class="mb-2">
+                                                        <label for="disabledTextInput">Account balance </label>
+                                                        <input value = "{{ val_total_prestamos_saldo }}" type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input" disabled="">
+                                                        <p class="text-danger" >
+                                                            {% if msg %}
+                                                                {{ msg | safe }}
+                                                            {% else %}
+                                                                -
+                                                            {% endif %}                                     
+                                                        </p>    
+                                                    
+                                                    </div>
+                                                    <!-- End of Form -->                                                                          
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+        </div>
+
+        <div class="table-settings mb-4">
+            <div class="row align-items-center justify-content-between">
+                <h2 class="h4"> List of people who are in need of help: </h2>
+            </div>
+        </div>
+
+    <div class="card card-body border-light shadow-sm table-wrapper table-responsive pt-0">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Money Needed For</th>
+                <th>Description</th>
+                <th>Amount Needed</th>
+                <th>Amount Raised</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Item -->
+            {% if borrowers is not True %}
+                {% for borro in borrowers %}
+                    <tr class="item-row">
+                        <td><span class="font-weight-bold">{{ borro.user.get_full_name }}</span></td>
+                        <td><span class="font-weight-normal">{{ borro.user.email }}</span></td>
+                        <td><span class="font-weight-normal">{{ borro.need_money_for }}</span></td>
+                        <td><span class="font-weight-normal">{{ borro.description }}</span></td>
+                        <td><span class="font-weight-normal">{{ borro.amount_need }}</span></td>
+                        <td><span class="font-weight-normal">
+                        {% if prestamos_total_sum is not True %}
+                            {% for borro_sum in prestamos_total_sum %}
+                               {% if borro.user.borrowerprofile.id == borro_sum.borrowerProfile_id %}
+                                    {{ borro_sum.amount_lent|floatformat:"0"  }}
+                               {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                         </span></td>
+                        <form Action ="{% url 'lender' borro.user.borrowerprofile.id 'save' %}" method = 'POST' >  {% csrf_token %} 
+
+                        <td class="font-weight-normal">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon2"><span class="fas fa-hand-holding-usd"></span></span>
+                                        {{ form.amount_lent }}
+
+                                        <span class="input-group-text" 
+                                        id="basic-addon2"><button type="submit" class="btn btn-block btn-primary">Lend</button></span>
+                                    </div>  
+                                </div>
+                          </td>
+                        </form>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+           <!---->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-settings mb-4">
+        <div class="row align-items-center justify-content-between">
+            <h2 class="h4"> List of peaple you lent money to: </h2>
+        </div>
+    </div>
+
+    <div class="card card-body border-light shadow-sm table-wrapper table-responsive pt-0">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Money Needed For</th>
+                <th>Description</th>
+                <th>Amount Needed</th>
+                <th>Amount Raised</th>
+                <th>Amount Lent</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% if borrowersPres is not True %}
+                {% for prestado in borrowersPres %}
+                    <tr class="item-row">
+                        <td><span class="font-weight-bold">{{ prestado.0}} {{ prestado.1 }}</span></td>
+                        <td><span class="font-weight-normal">{{ prestado.2 }}</span></td>
+                        <td><span class="font-weight-normal">{{ prestado.3 }}</span></td>
+                        <td><span class="font-weight-normal">{{ prestado.4 }}</span></td>
+                        <td><span class="font-weight-normal">{{ prestado.5 }}</span></td>
+                        <td><span class="font-weight-normal">{{ prestado.6 }}</span></td>
+                        <td><span class="font-weight-normal">{{ prestado.7 }}</span></td>
+                    </tr>
+                {% endfor %}
+            {% endif %} 
+            </tbody>
+        </table>
+    </div>
+        {% include 'includes/footer.html' %}
+    </main>
+{% endif %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- Custom app script -->
+<script type="application/javascript" src="{% static 'pres_assets/jquery/js/jquery-3.3.1.min.js' %}"></script>
+<script type="application/javascript" src="{% static 'pres_assets/jquery/js/jquery-confirm.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'pres_assets/jquery/cookie/jquery.cookie.js' %}"></script>
+<script type="application/javascript" src="{% static 'pres_assets/js/notify.js' %}"></script>
+<script type="application/javascript" src="{% static 'pres_assets/js/pres_js.js' %}"></script>
+
+{% endblock javascripts %}

@@ -1,0 +1,102 @@
+{% extends "layouts/base-fullscreen.html" %}
+{% load static %}
+
+{% block title %} Prestamos {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link type="text/css" href="{% static 'pres_assets/jquery/css/jquery-confirm.min.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+    <main class="content">
+        {% include 'includes/navigation.html' %}
+        <div class="preloader bg-soft flex-column justify-content-center align-items-center">
+            <!--img class="loader-element animate__animated animate__jackInTheBox"
+                 height="60" alt="Logo"-->
+        </div>
+
+        <div class="row align-items-center justify-content-between">
+            <div class="d-block mb-4 ">
+                <h2 class="h4"> Prestamos </h2>
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="card border-light shadow-sm components-section">
+                            <div class="card-body">     
+                                <div class="row mb-4">
+                                        <div class="col-lg-4 col-sm-6">
+                                            <!-- Form -->
+                                            <div class="mb-2">
+                                                <label for="disabledTextInput">Name</label>
+                                                <input value = "{{ request.user.get_full_name }}" type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input" disabled="">
+                                            </div>
+                                            <!-- End of Form -->
+                                            <!-- Form -->
+                                            <div class="mb-2">
+                                                <label for="disabledTextInput">Amount Needed</label>
+                                                <input value = "{{ request.user.borrowerprofile.amount_need }}" type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input" disabled="">
+                                            </div>
+                                            <!-- End of Form -->
+                                            <!-- Form -->
+                                            <div class="mb-2">
+                                                <label for="disabledTextInput">Amount Raised </label>
+                                                <input value = "{{ total_price }}" type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input" disabled="">
+                                            </div>
+                                            <!-- End of Form -->                                                                                
+                                         </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+        </div>
+        <div class="table-settings mb-4">
+            <div class="row align-items-center justify-content-between">
+                <h2 class="h4"> List of people who lent you money: </h2>
+            </div>
+        </div>
+        <div class="card card-body border-light shadow-sm table-wrapper table-responsive pt-0">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Amount lent</th>
+                    <th>lent Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Item -->
+                {% if prestamos is not True %}
+                    {% for prestado in prestamos %}
+                        <tr class="item-row">
+                            <td><span class="font-weight-bold">{{ prestado.lenderProfile.user.get_full_name }}</span></td>
+                            <td><span class="font-weight-normal">{{ prestado.lenderProfile.user.email }}</span></td>
+                            <td><span class="font-weight-normal">{{ prestado.amount_lent }}</span></td>
+                            <td><span class="font-weight-normal">{{ prestado.created_time|date:"Y-m-d"  }}</span></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        {% include 'includes/footer.html' %}
+    </main>
+{% endif %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- Custom app script -->
+<script type="application/javascript" src="{% static 'pres_assets/jquery/js/jquery-3.3.1.min.js' %}"></script>
+<script type="application/javascript" src="{% static 'pres_assets/jquery/js/jquery-confirm.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'pres_assets/jquery/cookie/jquery.cookie.js' %}"></script>
+<script type="application/javascript" src="{% static 'pres_assets/js/notify.js' %}"></script>
+<script type="application/javascript" src="{% static 'pres_assets/js/pres_js.js' %}"></script>
+
+{% endblock javascripts %}
