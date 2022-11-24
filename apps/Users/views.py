@@ -10,13 +10,11 @@ from .models import User
 def logout_view(request):
     logout(request)    
     return redirect("/")
+
 def login_view(request):
     form = LoginForm(request.POST or None)
-
     msg = None
-
     if request.method == "POST":
-
         if form.is_valid():
             email = form.cleaned_data.get("email")
             password = form.cleaned_data.get("password")
@@ -27,8 +25,6 @@ def login_view(request):
                     return redirect("/")
                 else:
                     return redirect("/")    
-                
-                
             else:    
                 msg = 'Invalid credentials'    
         else:

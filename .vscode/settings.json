@@ -1,0 +1,49 @@
+{
+    "sqltools.connections": [
+        {
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true,
+                "abortTransactionOnError": false
+            },
+            "previewLimit": 50,
+            "askForPassword": true,
+            "server": "172.17.43.30",
+            "driver": "MSSQL",
+            "name": "Tierra",
+            "username": "lguerrero",
+            "database": "arriendos",
+            "connectString": "Server=172.17.43.30;User Id=lguerrero;Password=anto1013;"
+        },
+        {
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 1433,
+            "askForPassword": true,
+            "driver": "MSSQL",
+            "connectString": "Server=172.17.40.19;User Id=lguerrero;Password=anto1013;",
+            "name": "Perseo"
+        },
+        {
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 1433,
+            "askForPassword": true,
+            "driver": "MSSQL",
+            "name": "ema-sql",
+            "username": "lguerrero",
+            "database": "procesossistemas"
+        }
+    ]
+}

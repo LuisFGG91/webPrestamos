@@ -132,6 +132,7 @@ class SignUpFormLander(forms.Form):
         ))
     def save(self, request,commit=True):
         
+        
         data = self.cleaned_data
         user = User(
             email=data['email'], 

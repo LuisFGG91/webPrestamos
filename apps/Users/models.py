@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from core import settings
-from apps import Users
+
 
 class UserManager(BaseUserManager):
     def create_user(self,email,first_name,last_name,password):
@@ -25,8 +25,7 @@ class UserManager(BaseUserManager):
             email = email,
             first_name = first_name ,
             last_name = last_name,
-            password = password,
-        )
+            password = password,)
         User.User_administrador = True
         User.save()
         return User
@@ -37,6 +36,8 @@ class User(AbstractBaseUser):
     last_name = models.CharField ('Apellidos',max_length = 254) 
     is_lander = models.BooleanField('Es lender',default=False)
     is_borrower = models.BooleanField('Es borrower',default=False)
+    
+    
     objects = UserManager()
     
     USERNAME_FIELD = 'email'
